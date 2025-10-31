@@ -1,0 +1,710 @@
+/* ProjectContacts.css */
+.project-contacts {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+.contacts-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.contacts-header h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.contacts-header p {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  margin: 0;
+}
+
+/* Navigation par onglets */
+.tabs-navigation {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 1rem;
+}
+
+.tab-button {
+  padding: 1rem 2rem;
+  border: none;
+  background: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tab-button.active {
+  color: #3b82f6;
+  background: #f0f9ff;
+  border-bottom: 3px solid #3b82f6;
+}
+
+.tab-button:hover:not(.active) {
+  background: #f9fafb;
+  color: #374151;
+}
+
+/* Layout principal */
+.contacts-content {
+  display: flex;
+  gap: 2rem;
+  position: relative;
+}
+
+.projects-list {
+  flex: 1;
+}
+
+.projects-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Cartes de projet */
+.project-contact-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e1e8ed;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-contact-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.project-header h3 {
+  font-size: 1.3rem;
+  color: #2c3e50;
+  margin: 0;
+  flex: 1;
+  font-weight: 600;
+}
+
+.status {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status.actif {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.en-attente {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.contact-info {
+  margin-bottom: 1.5rem;
+}
+
+.contact-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.contact-item strong {
+  color: #5a6c7d;
+  font-weight: 600;
+}
+
+.contact-item span:not(.amount):not(.progress-indicator) {
+  color: #2c3e50;
+}
+
+.amount {
+  font-weight: 700;
+  color: #27ae60;
+}
+
+.progress-indicator {
+  color: #3498db;
+  font-weight: 600;
+  background: #ebf5fb;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.contact-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-primary, .btn-secondary {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  background: #3498db;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #2980b9;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
+.btn-primary:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: #f8f9fa;
+  color: #495057;
+  border: 1px solid #dee2e6;
+}
+
+.btn-secondary:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Panel latéral */
+.contact-panel {
+  position: sticky;
+  top: 2rem;
+  width: 400px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e1e8ed;
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e1e8ed;
+  background: #f8f9fa;
+  border-radius: 12px 12px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.panel-header h3 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #7f8c8d;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  background: #e74c3c;
+  color: white;
+}
+
+/* Formulaire de contact */
+.contact-form {
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+/* Styles du Dashboard */
+.dashboard-view {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dashboard-header {
+  text-align: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.dashboard-header h3 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.dashboard-header p {
+  color: #6c757d;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Métriques principales */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.metric-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+}
+
+.metric-card h4 {
+  color: #374151;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Barres de progression */
+.progress-bar-container {
+  background: #f3f4f6;
+  height: 24px;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 12px;
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Jalons */
+.milestones-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+}
+
+.milestones-section h4 {
+  color: #1f2937;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.milestones-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.milestone-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  border-left: 4px solid transparent;
+}
+
+.milestone-item:hover {
+  background: #f8fafc;
+}
+
+.milestone-item.completed {
+  border-left-color: #10b981;
+  background: #f0fdf4;
+}
+
+.milestone-item.pending {
+  border-left-color: #f59e0b;
+  background: #fffbeb;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot.completed {
+  background: #10b981;
+}
+
+.status-dot.pending {
+  background: #f59e0b;
+}
+
+.milestone-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.milestone-name {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.milestone-date {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.milestone-badge {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* Indicateurs de performance */
+.kpis-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+}
+
+.kpis-section h4 {
+  color: #1f2937;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.kpis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.kpi-card {
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #e5e7eb;
+}
+
+.kpi-card.exceeded {
+  border-left-color: #10b981;
+  background: #f0fdf4;
+}
+
+.kpi-card.good {
+  border-left-color: #3b82f6;
+  background: #f0f9ff;
+}
+
+.kpi-card.warning {
+  border-left-color: #f59e0b;
+  background: #fffbeb;
+}
+
+.kpi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.kpi-name {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.kpi-value {
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 1.1rem;
+}
+
+.kpi-target {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.kpi-status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+.kpi-status.exceeded {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.kpi-status.good {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.kpi-status.warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* Informations financières */
+.financials-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+}
+
+.financials-section h4 {
+  color: #1f2937;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.financials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.financial-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.financial-item span {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.financial-item strong {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .project-contacts {
+    padding: 1rem;
+  }
+  
+  .contacts-content {
+    flex-direction: column;
+  }
+  
+  .contact-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-height: 100vh;
+    z-index: 1000;
+    border-radius: 0;
+  }
+  
+  .tabs-navigation {
+    flex-direction: column;
+  }
+  
+  .contact-actions {
+    flex-direction: column;
+  }
+  
+  .project-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .status {
+    align-self: flex-start;
+  }
+  
+  .metrics-grid,
+  .kpis-grid,
+  .financials-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .milestone-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .btn-primary, .btn-secondary {
+    width: 100%;
+  }
+}
+
+/* Animation pour le chargement */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.project-contact-card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Scrollbar personnalisée */
+.contact-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.contact-panel::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.contact-panel::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.contact-panel::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

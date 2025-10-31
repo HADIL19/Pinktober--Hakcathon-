@@ -1,0 +1,27 @@
+.investor-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.investor-main-content {
+  flex: 1;
+  margin-left: 90px;
+  padding: 2rem;
+  background: #f8fafc;
+  min-height: 100vh;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Quand le sidebar est étendu */
+.investor-sidebar.hovered ~ .investor-main-content {
+  margin-left: 240px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .investor-main-content {
+    margin-left: 0;
+    padding: 1.5rem;
+    padding-top: 5rem;
+  }
+}

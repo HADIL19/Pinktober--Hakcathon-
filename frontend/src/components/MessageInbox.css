@@ -1,0 +1,123 @@
+/* src/components/MessageInbox.css */
+.message-inbox {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.inbox-header {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.message-stats {
+  display: flex;
+  gap: 15px;
+  font-size: 14px;
+}
+
+.message-stats .unread {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.inbox-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.inbox-tabs button {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.inbox-tabs button.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.message-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  background: white;
+}
+
+.message-card.unread {
+  border-left: 4px solid #3b82f6;
+  background: #f8fafc;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.message-sender {
+  font-size: 14px;
+}
+
+.message-date {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.message-subject {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.project-badge {
+  background: #e5e7eb;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.message-content {
+  color: #4b5563;
+  margin-bottom: 12px;
+  white-space: pre-line;
+}
+
+.message-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-reply {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.unread-badge {
+  background: #ef4444;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.no-messages {
+  text-align: center;
+  color: #6b7280;
+  padding: 40px;
+}
