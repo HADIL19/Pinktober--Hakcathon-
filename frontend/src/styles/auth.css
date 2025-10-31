@@ -1,0 +1,237 @@
+/* Styles pour les composants d'authentification */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #692644;
+  padding: 40px 20px;
+}
+
+.auth-card {
+  background: white;
+  border-radius: 30px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  padding: 60px 50px;
+  width: 100%;
+  max-width: 650px;
+  min-height: 600px;
+  border: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-title {
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+  color: #e91e63;
+  margin-bottom: 20px;
+  font-family: 'Arial', sans-serif;
+  line-height: 1.2;
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 50px;
+  font-size: 1.3rem;
+  line-height: 1.6;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  display: block;
+  color: #333;
+  margin-bottom: 15px;
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+.form-input {
+  width: 100%;
+  border: 2px solid #e0e0e0;
+  border-radius: 18px;
+  padding: 22px 25px;
+  font-size: 1.3rem;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #e91e63;
+  background-color: white;
+  box-shadow: 0 0 0 5px rgba(233, 30, 99, 0.15);
+}
+
+.form-select {
+  width: 100%;
+  border: 2px solid #e0e0e0;
+  border-radius: 18px;
+  padding: 22px 25px;
+  font-size: 1.3rem;
+  background-color: #fafafa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: #e91e63;
+  background-color: white;
+  box-shadow: 0 0 0 5px rgba(233, 30, 99, 0.15);
+}
+
+.auth-button {
+  width: 100%;
+  background: linear-gradient(135deg, #e91e63, #ad1457);
+  color: white;
+  border: none;
+  border-radius: 18px;
+  padding: 25px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  letter-spacing: 1px;
+}
+
+.auth-button:hover {
+  background: linear-gradient(135deg, #d81b60, #880e4f);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(233, 30, 99, 0.4);
+}
+
+.auth-button:active {
+  transform: translateY(-1px);
+}
+
+.auth-link {
+  text-align: center;
+  margin-top: 40px;
+  color: #666;
+  font-size: 1.3rem;
+}
+
+.auth-link a {
+  color: #e91e63;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+  font-size: 1.3rem;
+}
+
+.auth-link a:hover {
+  color: #ad1457;
+  text-decoration: underline;
+}
+
+.error-message {
+  color: #f44336;
+  text-align: center;
+  font-size: 1.3rem;
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #ffebee;
+  border-radius: 15px;
+  border-left: 6px solid #f44336;
+}
+
+/* Styles spécifiques pour les placeholders */
+.form-input::placeholder {
+  color: #999;
+  opacity: 1;
+  font-size: 1.3rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .auth-container {
+    padding: 30px 15px;
+  }
+  
+  .auth-card {
+    padding: 40px 30px;
+    border-radius: 25px;
+    max-width: 500px;
+    min-height: 500px;
+  }
+  
+  .auth-title {
+    font-size: 2.5rem;
+  }
+  
+  .auth-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+  }
+  
+  .form-input,
+  .form-select {
+    padding: 20px 22px;
+    font-size: 1.2rem;
+    border-radius: 15px;
+  }
+  
+  .auth-button {
+    padding: 22px;
+    font-size: 1.3rem;
+    border-radius: 15px;
+  }
+  
+  .auth-link {
+    font-size: 1.2rem;
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-container {
+    padding: 20px 10px;
+  }
+  
+  .auth-card {
+    padding: 30px 20px;
+    border-radius: 20px;
+    max-width: 100%;
+    min-height: auto;
+  }
+  
+  .auth-title {
+    font-size: 2rem;
+  }
+  
+  .auth-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+  }
+  
+  .form-input,
+  .form-select {
+    padding: 18px 20px;
+    font-size: 1.1rem;
+  }
+  
+  .auth-button {
+    padding: 20px;
+    font-size: 1.2rem;
+  }
+  
+  .auth-link {
+    font-size: 1.1rem;
+    margin-top: 25px;
+  }
+}
