@@ -6,7 +6,7 @@ import Donateur from "./pages/Donateur";
 import Sponsor from "./pages/Sponsor";
 import Investisseur from "./pages/Investisseur";
 import PorteurProjet from "./pages/PorteurProjet";
-import Footer from "./components/Footer";
+
 
 export default function App() {
   return (
@@ -21,7 +21,7 @@ export default function App() {
           <Route path="/investisseur" element={<Investisseur />} />
           <Route path="/porteur-projet" element={<PorteurProjet />} />
         </Routes>
-        <Footer />
+        
       </div>
     </Router>
   );

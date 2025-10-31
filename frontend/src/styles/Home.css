@@ -1,0 +1,472 @@
+/* Google Font Import (Inter - used throughout for modern look) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+/* Font Awesome for social icons */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+
+
+/* --- 0. Global Variables and Base Reset --- */
+:root {
+  --color-primary: #D81B60; /* Deep Rose Pink - Main brand color */
+  --color-secondary: #B83257; /* Slightly darker pink */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.home {
+  overflow-x: hidden;
+  
+}
+
+.badge {
+  display: inline-block;
+  
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 4px 10px;
+  
+  margin-bottom: 20px;
+}
+
+#accueil {
+  margin: 0px; /* Adjust based on navbar height */
+  height: 700px;
+  
+}
+
+#about {
+    padding-top: 60px;
+    padding-bottom: 5px;
+    
+}
+
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(180deg, #b83257 0%, #6e2842 100%);
+  color: #fff;
+  padding: 180px 60px 120px;
+  text-align: center;
+  margin-top: 70px;
+}
+
+.hero-content {
+  width: 1000px;
+  margin: auto;
+  padding-top : 150px; 
+}
+
+.hero h1 {
+  font-size: 80px;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+
+.hero h1 span {
+  color: #ffd6e1;
+}
+
+.hero p {
+  font-size: 20px;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 30px;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  
+}
+
+.btn {
+  padding: 12px 26px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn.primary {
+  background: #f38aa5;
+  color: #fff;
+  border: none;
+  width: 250px;
+}
+
+.btn.primary:hover {
+  background: #f15983;
+}
+
+.btn.outline {
+  border: 2px solid #fff;
+  color: #fff;
+  background: transparent;
+}
+
+.btn.outline:hover {
+  background: #fff;
+  color: #b83257;
+}
+
+/* About */
+.section {
+  padding: 100px 60px;
+  text-align: center;
+}
+
+.section.light {
+  background: #f8f5f6;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 32px;
+  margin-top: 40px;
+}
+
+.about-item {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.about-item h3 {
+  color: #b83257;
+  margin-bottom: 10px;
+}
+
+/* Footer */
+
+/* --- 5. Footer Section --- */
+.footer-section {
+  background: var(--color-secondary); /* A strong background for contrast */
+  color: #fff;
+  padding: 60px 5% 30px 5%;
+  margin-top: 60px; /* Space above footer */
+}
+
+/* Main content grid for footer */
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin: 0 auto 40px auto;
+  max-width: 1200px;
+}
+
+/* --- Brand Column --- */
+.footer-brand {
+  max-width: 300px;
+}
+
+.footer-brand h2 {
+  font-size: 26px;
+  margin-bottom: 10px;
+  color: #fff;
+  font-weight: 700;
+}
+
+.footer-brand p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #ffe4ec; /* Lighter text for readability */
+}
+
+/* --- Links Column --- */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 150px;
+}
+
+.footer-links h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.footer-links a {
+  color: #ffe4ec;
+  text-decoration: none;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* --- Social Column --- */
+.footer-social h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.social-icons {
+  display: flex;
+  gap: 20px;
+}
+
+.social-icons a {
+  color: #fff;
+  font-size: 20px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: var(--color-light-pink);
+  transform: scale(1.15);
+}
+
+/* --- Bottom Copyright Bar --- */
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 25px;
+  text-align: center;
+  font-size: 14px;
+  color: #ffe4ec;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ================================== */
+/* RESPONSIVENESS            */
+/* ================================== */
+
+
+/* Responsive */
+@media (max-width: 900px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-brand,
+  .footer-links,
+  .footer-social {
+    max-width: 90%;
+  }
+}
+
+
+/* Responsive layout */
+@media (max-width: 600px) {
+  .footer-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero {
+    padding: 140px 20px 80px;
+  }
+  .section {
+    padding: 80px 20px;
+  }
+}
+/* -------------------------------------- */
+/* 3. About Section Grid */
+/* -------------------------------------- */
+
+#statistique {
+    margin-top:0 ;
+    padding-bottom: 80px;
+    
+}
+.section-about {
+  background-color: #fff8fa;
+}
+
+.section-title {
+    color: #4e3840;
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+.section-subtitle {
+  color: #a8003d;
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-weight: 800; /* Très gras */
+  
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.about-item {
+  padding: 30px;
+  background-color: var(--color-background-soft);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(216, 27, 96, 0.1);
+    background-color: rgb(254, 230, 233);
+}
+
+.about-item h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.about-item p {
+    font-size: 20px;
+    color: var(--color-text-light);
+}
+
+.icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background-color: var(--color-light-pink);
+    border-radius: 50%;
+    margin: 0 auto;
+    font-size: 30px;
+}
+
+/* -------------------------------------- */
+/* Statistics Section - NEW DESIGN (Non-Square Focus) */
+/* -------------------------------------- */
+
+.statistics-section {
+  position: relative;
+  /* Reduced padding to let the statistics items stand out more */
+  padding: 60px 5%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 40px; /* Space between statistic items */
+  text-align: center;
+  margin: 60px auto;
+  max-width: 1200px;
+  /* Removed border-radius and box-shadow from the container to let the items define the shape */
+  /* Using a subtle background color for separation */
+  background-color: var(--color-background-soft); 
+  /* Ensure no shadow on the background container */
+  box-shadow: none; 
+}
+
+/* Removed the diagonal cut (::before pseudo-element) 
+  as the focus is now on the individual item shape. 
+  The items' design will carry the non-square aesthetic. 
+*/
+
+.statistic-item {
+  flex: 0 1 250px; /* Flex-basis ensures minimal size, but allows shrinking */
+  max-width: 280px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 35px 20px; 
+  
+  /* --- The key change: Removing the square look --- */
+  background: #FFFFFF;
+  /* Extremely rounded corners make it cloud-like/pill-shaped */
+  border-radius: 40px; 
+  /* Using a light border instead of a heavy shadow for a clean look */
+  border: 2px solid var(--color-light-pink);
+  
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Lighter shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  z-index: 2; 
+}
+
+.statistic-item:hover {
+  transform: translateY(-8px); 
+  /* Highlight border on hover */
+  border-color: var(--color-primary); 
+  box-shadow: 0 15px 35px rgba(216, 27, 96, 0.15); /* More visible shadow on hover */
+}
+
+.statistic-icon {
+  font-size: 55px;
+  margin-bottom: 15px;
+  color: var(--color-primary);
+  /* Added a background glow/halo for visual depth */
+  background: var(--color-light-pink); 
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 0 10px rgba(252, 228, 236, 0.5); /* Subtle halo effect */
+}
+
+.statistic-value {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--color-secondary);
+  margin-bottom: 5px;
+  line-height: 1;
+}
+
+.statistic-label {
+  font-size: 19px;
+  color: var(--color-text-dark);
+  font-weight: 500;
+  line-height: 1.4;
+  /* Ensure label text breaks nicely */
+  word-wrap: break-word; 
+}
+
+/* -------------------------------------- */
+/* Responsive Adjustments for Statistics */
+/* -------------------------------------- */
+@media (max-width: 768px) {
+  .statistics-section {
+    flex-direction: column; 
+    padding: 30px 5%;
+    gap: 30px; 
+    margin: 30px auto;
+  }
+  .statistic-item {
+    max-width: 300px; /* Set a consistent max width on mobile */
+    width: 100%; 
+    padding: 30px 20px;
+    border-radius: 30px;
+  }
+  .statistic-icon {
+    font-size: 45px;
+    width: 60px;
+    height: 60px;
+  }
+  .statistic-value {
+    font-size: 36px;
+  }
+  .statistic-label {
+    font-size: 16px;
+  }
+}
