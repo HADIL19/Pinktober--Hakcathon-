@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:root {
+  --primary: #b83257;
+  --primary-light: #f38aa5;
+  --primary-dark: #6e2842;
+  --accent: #ffd6e1;
+  --border: #e5b7c4;
+  --background: #fff8fa;
+  --text-dark: #3a2e33;
+  --text-light: #74525d;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--background);
+}
+
+.sponsor-request-page {
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+}
+.top-bar {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+}
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+.request-container {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 800px;
+  width: 100%;
+  box-shadow: 0 10px 25px rgba(184, 50, 87, 0.1);
+}
+
+.request-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header-icon {
+  font-size: 2.5rem;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.sponsorship-types,
+.categories-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.type-option,
+.category-option {
+  flex: 1 1 calc(50% - 1rem);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.type-option.selected,
+.category-option.selected {
+  border-color: var(--primary);
+  background: var(--accent);
+}
+
+/* 🎀 Actions — alignement propre des boutons */
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-top: 2rem;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 0.9rem 2rem;
+  border-radius: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 180px;
+}
+
+/* 🌸 Bouton principal */
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  box-shadow: 0 3px 10px rgba(184, 50, 87, 0.25);
+}
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(184, 50, 87, 0.35);
+}
+
+/* 🌷 Bouton secondaire */
+.btn-secondary {
+  background: none;
+  border: 1px solid var(--primary-light);
+  color: var(--primary);
+}
+.btn-secondary:hover {
+  background: var(--accent);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* 📱 Responsive */
+@media (max-width: 600px) {
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+  }
+}

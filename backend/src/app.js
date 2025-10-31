@@ -3,6 +3,7 @@ const cors = require('cors');
 
 // Routes
 const projectRoutes = require('./routes/projectRoutes');
+const sponsorsRoutes = require('./routes/sponsors');
 
 const app = express();
 
@@ -16,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/projects', projectRoutes);
-
+app.use('/api/sponsors', sponsorsRoutes);
 // Route de santé
 app.get('/api/health', (req, res) => {
   res.json({ 
@@ -37,6 +38,10 @@ app.get('/', (req, res) => {
     }
   });
 });
+
+
+// Add this with your other routes
+
 
 // Gestion des routes non trouvées - CORRECTION ICI
 app.use((req, res) => {

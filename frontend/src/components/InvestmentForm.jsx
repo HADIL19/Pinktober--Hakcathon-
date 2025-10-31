@@ -34,6 +34,7 @@ const InvestmentForm = () => {
       
       alert(`✅ Investissement de ${investment.amount}€ envoyé avec succès !\n\nVous recevrez un email de confirmation.`);
       navigate('/ProjectsMarketplace');
+    // eslint-disable-next-line no-unused-vars
     } catch (error) {
       alert('❌ Erreur lors de l\'envoi. Veuillez réessayer.');
     } finally {

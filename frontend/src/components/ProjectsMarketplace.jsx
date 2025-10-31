@@ -229,7 +229,7 @@ const ProjectsMarketplace = () => {
 };
 
   // Fonction pour "Investir"
-  const handleInvest = (projectId, projectTitle) => {
+  const handleInvest = (projectId) => {
    navigate(`/invest/${projectId}`);
   };
 

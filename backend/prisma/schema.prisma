@@ -56,3 +56,55 @@ model Investment {
   project   Project  @relation(fields: [projectId], references: [id])
   createdAt DateTime @default(now())
 }
+
+// Add these models to your existing schema
+
+model Sponsor {
+  id              Int      @id @default(autoincrement())
+  name            String
+  logo            String?
+  description     String?  @db.Text
+  contactEmail    String
+  contactPhone    String?
+  website         String?
+  sponsorshipType String
+  totalAmount     Float    @default(0)
+  startDate       DateTime @default(now())
+  endDate         DateTime?
+  status          String   @default("active")
+  categories      Json
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  sponsorships    Sponsorship[]
+}
+
+model Sponsorship {
+  id              Int      @id @default(autoincrement())
+  sponsorId       Int
+  sponsor         Sponsor  @relation(fields: [sponsorId], references: [id])
+  itemName        String
+  itemCategory    String
+  amount          Float
+  description     String?  @db.Text
+  duration        Int?
+  status          String   @default("active")
+  startDate       DateTime @default(now())
+  endDate         DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model SponsorshipRequest {
+  id              Int      @id @default(autoincrement())
+  companyName     String
+  contactName     String
+  contactEmail    String
+  contactPhone    String?
+  message         String   @db.Text
+  requestedAmount Float?
+  requestedType   String?
+  categories      Json
+  status          String   @default("pending")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
