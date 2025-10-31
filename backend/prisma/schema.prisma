@@ -22,11 +22,20 @@ model Project {
   id          Int      @id @default(autoincrement())
   title       String
   description String?
+  budget      Float?   @default(0)
+  duration    Int?     @default(24)  // en mois
   ownerId     Int
   owner       User     @relation(fields: [ownerId], references: [id])
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   investments Investment[]
   donations   Donation[]
+  
+  // Nouveaux champs pour la marketplace
+  domain      String?  // domaine de recherche
+  stage       String?  // stade du projet
+  status      String   @default("active") // active, completed, cancelled
+  location    String?  // localisation
 }
 
 model Donation {
