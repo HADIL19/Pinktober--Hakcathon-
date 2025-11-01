@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import "../styles/Home.css";
+import AIAssistant from '../components/AIAssistant';
 
 export default function Home() {
     const scrollToSection = (id) => {
@@ -140,7 +141,11 @@ export default function Home() {
           <p>© 2025 PinkHope. Ensemble pour un avenir sans cancer 💗</p>
         </div>
       </section>
-
+     <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <AIAssistant />
+        </div>
+      </section>
     </div>
   );
 }

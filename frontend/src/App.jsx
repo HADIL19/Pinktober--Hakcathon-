@@ -6,11 +6,14 @@ import Donateur from "./pages/Donateur";
 import Sponsor from "./pages/Sponsor";
 import Investisseur from "./pages/Investisseur";
 import PorteurProjet from "./pages/PorteurProjet";
+
 import ProjectsMarketplace from "./components/ProjectsMarketplace";
 import ProjectDetails from './components/ProjectDetails';
 import InvestmentForm from './components/InvestmentForm';
 import SponsorsPage from './components/SponsorsPage';
 import SponsorRequestForm from './components/SponsorRequestForm';
+import AIAssistant from './components/AIAssistant';
+import HealthAssistant from "./pages/HealthAssistant";
 
 export default function App() {
   return (
@@ -29,8 +32,10 @@ export default function App() {
           <Route path="/invest/:id" element={<InvestmentForm />} />
           <Route path="/sponsors" element={<SponsorsPage />} />
           <Route path="/sponsor-request" element={<SponsorRequestForm />} />
+          {/* Add AI Assistant Route */}
+          <Route path="/ai-assistant" element={<AIAssistant />} />
+          <Route path="/sante" element={<HealthAssistant />} />
         </Routes>
-        
       </div>
     </Router>
   );

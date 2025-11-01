@@ -23,7 +23,7 @@ model Project {
   title       String
   description String?
   budget      Float?   @default(0)
-  duration    Int?     @default(24)  // en mois
+  duration    Int?     @default(24)
   ownerId     Int
   owner       User     @relation(fields: [ownerId], references: [id])
   createdAt   DateTime @default(now())
@@ -32,10 +32,16 @@ model Project {
   donations   Donation[]
   
   // Nouveaux champs pour la marketplace
-  domain      String?  // domaine de recherche
-  stage       String?  // stade du projet
-  status      String   @default("active") // active, completed, cancelled
-  location    String?  // localisation
+  domain      String?
+  stage       String?
+  status      String   @default("active")
+  location    String?
+
+  // ✅ Champs IA (nouveaux)
+  impactScore   Int?
+  strengths     String?
+  weaknesses    String?
+  shortFeedback String?
 }
 
 model Donation {

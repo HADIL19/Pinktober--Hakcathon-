@@ -59,7 +59,17 @@ const SponsorsPage = () => {
       technology: '💻',
       spaces: '🌿',
       events: '🎪',
-      research: '🔬'
+      research: '🔬',
+      health: '💖',
+      awareness: '🎀',
+      charity: '🤝',
+      beauty: '💄',
+      fashion: '👗',
+      fitness: '🏋️‍♂️',
+      food: '🍽️',
+      wellness: '🧘',
+      tech: '🖥️',
+      innovation: '🚀'
     };
     return icons[category] || '📦';
   };
@@ -70,7 +80,17 @@ const SponsorsPage = () => {
       technology: 'Technologie',
       spaces: 'Espaces',
       events: 'Événements',
-      research: 'Recherche'
+      research: 'Recherche',
+      health: 'Santé',
+      awareness: 'Sensibilisation',
+      charity: 'Charité',
+      beauty: 'Beauté',
+      fashion: 'Mode',
+      fitness: 'Fitness',
+      food: 'Alimentation',
+      wellness: 'Bien-être',
+      tech: 'Technologie',
+      innovation: 'Innovation'
     };
     return labels[category] || category;
   };
@@ -84,8 +104,9 @@ const SponsorsPage = () => {
     };
 
     sponsors.forEach(sponsor => {
-      if (tiers[sponsor.sponsorshipType]) {
-        tiers[sponsor.sponsorshipType].push(sponsor);
+      const tier = sponsor.sponsorshipType?.toLowerCase();
+      if (tiers[tier]) {
+        tiers[tier].push(sponsor);
       }
     });
 
@@ -184,65 +205,25 @@ const SponsorsPage = () => {
             <p>Découvrez nos partenaires classés selon leur niveau d'engagement</p>
           </div>
 
-          {/* Platinum Sponsors */}
-          {groupedSponsors.platinum.length > 0 && (
-            <div className="tier-section">
-              <div className="tier-header">
-                <span className="tier-badge platinum">💎 PLATINUM</span>
-                <h3 className="tier-title">Partenaires Platine</h3>
+          {['platinum','gold','silver','bronze'].map(tier => (
+            groupedSponsors[tier].length > 0 && (
+              <div key={tier} className="tier-section">
+                <div className="tier-header">
+                  <span className={`tier-badge ${tier}`}>
+                    {tier === 'platinum' ? '💎 PLATINUM' :
+                     tier === 'gold' ? '🥇 GOLD' :
+                     tier === 'silver' ? '🥈 SILVER' : '🥉 BRONZE'}
+                  </span>
+                  <h3 className="tier-title">Partenaires {tier.charAt(0).toUpperCase() + tier.slice(1)}</h3>
+                </div>
+                <div className="sponsors-grid">
+                  {groupedSponsors[tier].map(sponsor => (
+                    <SponsorCard key={sponsor.id} sponsor={sponsor} formatAmount={formatAmount} getCategoryLabel={getCategoryLabel} />
+                  ))}
+                </div>
               </div>
-              <div className="sponsors-grid">
-                {groupedSponsors.platinum.map(sponsor => (
-                  <SponsorCard key={sponsor.id} sponsor={sponsor} formatAmount={formatAmount} getCategoryLabel={getCategoryLabel} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Gold Sponsors */}
-          {groupedSponsors.gold.length > 0 && (
-            <div className="tier-section">
-              <div className="tier-header">
-                <span className="tier-badge gold">🥇 GOLD</span>
-                <h3 className="tier-title">Partenaires Or</h3>
-              </div>
-              <div className="sponsors-grid">
-                {groupedSponsors.gold.map(sponsor => (
-                  <SponsorCard key={sponsor.id} sponsor={sponsor} formatAmount={formatAmount} getCategoryLabel={getCategoryLabel} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Silver Sponsors */}
-          {groupedSponsors.silver.length > 0 && (
-            <div className="tier-section">
-              <div className="tier-header">
-                <span className="tier-badge silver">🥈 SILVER</span>
-                <h3 className="tier-title">Partenaires Argent</h3>
-              </div>
-              <div className="sponsors-grid">
-                {groupedSponsors.silver.map(sponsor => (
-                  <SponsorCard key={sponsor.id} sponsor={sponsor} formatAmount={formatAmount} getCategoryLabel={getCategoryLabel} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Bronze Sponsors */}
-          {groupedSponsors.bronze.length > 0 && (
-            <div className="tier-section">
-              <div className="tier-header">
-                <span className="tier-badge bronze">🥉 BRONZE</span>
-                <h3 className="tier-title">Partenaires Bronze</h3>
-              </div>
-              <div className="sponsors-grid">
-                {groupedSponsors.bronze.map(sponsor => (
-                  <SponsorCard key={sponsor.id} sponsor={sponsor} formatAmount={formatAmount} getCategoryLabel={getCategoryLabel} />
-                ))}
-              </div>
-            </div>
-          )}
+            )
+          ))}
         </section>
       )}
 
@@ -277,6 +258,10 @@ const SponsorCard = ({ sponsor, formatAmount, getCategoryLabel }) => {
     return name.split(' ').map(word => word[0]).join('').substring(0, 2).toUpperCase();
   };
 
+  // Parse categories safely
+  const categories = Array.isArray(sponsor.categories) ? sponsor.categories :
+                     (sponsor.categories ? JSON.parse(sponsor.categories) : []);
+
   return (
     <div className="sponsor-card">
       <div className="sponsor-logo">
@@ -291,7 +276,7 @@ const SponsorCard = ({ sponsor, formatAmount, getCategoryLabel }) => {
       </div>
 
       <div className="sponsor-categories">
-        {sponsor.categories.map(cat => (
+        {categories.map(cat => (
           <span key={cat} className="category-tag">
             {getCategoryLabel(cat)}
           </span>

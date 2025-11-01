@@ -1,12 +1,9 @@
-const express = require('express');
-const { getAllProjects, getProjectById } = require('../controllers/projectController');
+import express from "express";
+import { getAllProjects, getProjectById } from "../controllers/projectController.js";
 
 const router = express.Router();
 
-// Route pour la marketplace - GET /api/projects
-router.get('/', getAllProjects);
+router.get("/", getAllProjects);
+router.get("/:id", getProjectById);
 
-// Route pour un projet spécifique - GET /api/projects/:id
-router.get('/:id', getProjectById);
-
-module.exports = router;
+export default router;

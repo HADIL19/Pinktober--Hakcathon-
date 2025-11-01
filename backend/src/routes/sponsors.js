@@ -1,9 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+import express from 'express';
+import { PrismaClient } from '@prisma/client';
 
-// --- 1️⃣ GET all sponsors ---
+const prisma = new PrismaClient();
+const router = express.Router();
+
+// --- GET all sponsors ---
 router.get('/', async (req, res) => {
   try {
     const sponsors = await prisma.sponsor.findMany({
@@ -17,7 +18,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// --- 2️⃣ GET sponsor by ID ---
+// --- GET sponsor by ID ---
 router.get('/:id', async (req, res) => {
   try {
     const sponsor = await prisma.sponsor.findUnique({
@@ -31,13 +32,11 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// --- 3️⃣ GET all sponsored items ---
+// --- GET all sponsored items ---
 router.get('/items/all', async (req, res) => {
   try {
     const items = await prisma.sponsorship.findMany({
-      include: {
-        sponsor: { select: { name: true } }
-      },
+      include: { sponsor: { select: { name: true } } },
       orderBy: { createdAt: 'desc' }
     });
     res.json({ success: true, data: items });
@@ -46,11 +45,10 @@ router.get('/items/all', async (req, res) => {
   }
 });
 
-// --- 4️⃣ POST new sponsorship request ---
+// --- POST new sponsorship request ---
 router.post('/request', async (req, res) => {
   try {
     const data = req.body;
-
     const newRequest = await prisma.sponsorshipRequest.create({
       data: {
         companyName: data.companyName,
@@ -63,7 +61,6 @@ router.post('/request', async (req, res) => {
         categories: data.categories || [],
       }
     });
-
     res.status(201).json({ success: true, data: newRequest });
   } catch (error) {
     console.error('Erreur création demande sponsor:', error);
@@ -71,7 +68,7 @@ router.post('/request', async (req, res) => {
   }
 });
 
-// --- 5️⃣ GET stats overview ---
+// --- GET stats overview ---
 router.get('/stats/overview', async (req, res) => {
   try {
     const totalSponsors = await prisma.sponsor.count();
@@ -94,4 +91,4 @@ router.get('/stats/overview', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

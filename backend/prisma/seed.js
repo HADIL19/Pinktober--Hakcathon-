@@ -1,12 +1,11 @@
-// prisma/seed.js
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
   console.log('🌸 Insertion des données de test Pinktober...');
 
-  // --- 1️⃣ Créer des sponsors ---
-  const sponsors = await prisma.sponsor.createMany({
+  // --- Sponsors ---
+  await prisma.sponsor.createMany({
     data: [
       {
         name: "PinkHope Foundation",
@@ -41,74 +40,31 @@ async function main() {
         totalAmount: 4000,
         categories: ["fitness", "health"],
       }
-    ],
-  });
-
-  console.log("✅ Sponsors créés !");
-
-  // --- 2️⃣ Créer des sponsorships ---
-  const sponsorships = await prisma.sponsorship.createMany({
-    data: [
-      {
-        sponsorId: 1,
-        itemName: "Pink Awareness Marathon",
-        itemCategory: "Event",
-        amount: 8000,
-        description: "Sponsoring de l’événement sportif Pink Marathon 2025.",
-        duration: 30,
-      },
-      {
-        sponsorId: 2,
-        itemName: "Cosmetic Campaign",
-        itemCategory: "Marketing",
-        amount: 5000,
-        description: "Campagne de sensibilisation en partenariat avec Beauty4Hope.",
-        duration: 45,
-      },
-      {
-        sponsorId: 3,
-        itemName: "Gym Pink Challenge",
-        itemCategory: "Health",
-        amount: 2000,
-        description: "Challenge fitness pour collecter des dons Pinktober.",
-        duration: 15,
-      }
     ]
   });
 
-  console.log("✅ Sponsorships créés !");
-
-  // --- 3️⃣ Créer des demandes de sponsor ---
-  const sponsorshipRequests = await prisma.sponsorshipRequest.createMany({
+  // --- Sponsorships ---
+  await prisma.sponsorship.createMany({
     data: [
-      {
-        companyName: "Happy Drinks",
-        contactName: "Sarah Lamine",
-        contactEmail: "sarah@happydrinks.com",
-        contactPhone: "+213550000010",
-        message: "Nous souhaitons participer à Pinktober en tant que sponsor argent.",
-        requestedAmount: 3000,
-        requestedType: "Silver",
-        categories: ["food", "wellness"]
-      },
-      {
-        companyName: "Tech4Her",
-        contactName: "Yasmine Bouali",
-        contactEmail: "yasmine@tech4her.io",
-        message: "Nous voulons soutenir les initiatives technologiques pour Pinktober.",
-        requestedAmount: 8000,
-        requestedType: "Gold",
-        categories: ["tech", "innovation"]
-      }
+      { sponsorId: 1, itemName: "Pink Awareness Marathon", itemCategory: "Event", amount: 8000, description: "Sponsoring de l’événement sportif Pink Marathon 2025.", duration: 30 },
+      { sponsorId: 2, itemName: "Cosmetic Campaign", itemCategory: "Marketing", amount: 5000, description: "Campagne de sensibilisation en partenariat avec Beauty4Hope.", duration: 45 },
+      { sponsorId: 3, itemName: "Gym Pink Challenge", itemCategory: "Health", amount: 2000, description: "Challenge fitness pour collecter des dons Pinktober.", duration: 15 }
     ]
   });
 
-  console.log("✅ SponsorshipRequests créés !");
-  console.log("🌸 Base de données remplie avec succès !");
+  // --- Sponsorship Requests ---
+  await prisma.sponsorshipRequest.createMany({
+    data: [
+      { companyName: "Happy Drinks", contactName: "Sarah Lamine", contactEmail: "sarah@happydrinks.com", contactPhone: "+213550000010", message: "Nous souhaitons participer à Pinktober en tant que sponsor argent.", requestedAmount: 3000, requestedType: "Silver", categories: ["food", "wellness"] },
+      { companyName: "Tech4Her", contactName: "Yasmine Bouali", contactEmail: "yasmine@tech4her.io", message: "Nous voulons soutenir les initiatives technologiques pour Pinktober.", requestedAmount: 8000, requestedType: "Gold", categories: ["tech", "innovation"] }
+    ]
+  });
+
+  console.log("✅ Base de données remplie avec succès !");
 }
 
 main()
-  .catch((e) => {
+  .catch(e => {
     console.error("❌ Erreur lors du seed :", e);
   })
   .finally(async () => {

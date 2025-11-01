@@ -1,8 +1,7 @@
-// backend/src/controllers/analyticsController.js
-import { Project } from '../models/Project.js';
+const { Project } = require('../models/Project');
 
 // ✅ GET /api/analytics/platform-stats - Statistiques de la plateforme
-export const getPlatformStats = async (req, res) => {
+const getPlatformStats = async (req, res) => {
   try {
     const stats = await Project.getPlatformStats();
 
@@ -20,3 +19,5 @@ export const getPlatformStats = async (req, res) => {
     });
   }
 };
+
+module.exports = { getPlatformStats };

@@ -73,15 +73,15 @@ export const projectService = {
             apiFilters.search = filters[key];
             break;
           case 'budget':
-            const [minBudget, maxBudget] = this.parseBudgetRange(filters[key]);
+            { const [minBudget, maxBudget] = this.parseBudgetRange(filters[key]);
             if (minBudget !== undefined) apiFilters.minBudget = minBudget;
             if (maxBudget !== undefined) apiFilters.maxBudget = maxBudget;
-            break;
+            break; }
           case 'duration':
-            const [minDuration, maxDuration] = this.parseDurationRange(filters[key]);
+            { const [minDuration, maxDuration] = this.parseDurationRange(filters[key]);
             if (minDuration !== undefined) apiFilters.minDuration = minDuration;
             if (maxDuration !== undefined) apiFilters.maxDuration = maxDuration;
-            break;
+            break; }
           case 'aiScore':
             apiFilters.minScore = parseInt(filters[key]);
             break;

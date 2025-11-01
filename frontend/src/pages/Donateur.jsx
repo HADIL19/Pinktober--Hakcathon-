@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import AIAssistant from '../components/AIAssistant';
 
 export default function Donateur() {
   return (
@@ -28,6 +29,15 @@ export default function Donateur() {
           </Link>
         </div>
       </section>
+      <div className="mt-12">
+        <h2 className="text-2xl font-bold text-pink-600 mb-6">
+          Assistant Santé IA
+        </h2>
+        <p className="text-gray-600 mb-6">
+          Obtenez des informations claires sur le cancer du sein
+        </p>
+        <AIAssistant />
+      </div>
     </div>
   );
 }

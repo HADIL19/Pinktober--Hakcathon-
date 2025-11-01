@@ -1,6 +1,6 @@
 // Services pour communiquer avec le backend
 // eslint-disable-next-line no-undef
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
 
 class ApiService {
   constructor() {
