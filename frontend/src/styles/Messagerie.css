@@ -1,0 +1,87 @@
+.messagerie {
+  padding: 1rem;
+  background-color: #ffeef5; /* soft pink background */
+  min-height: 100vh;
+  color: #333; /* readable dark gray text */
+}
+
+.messages-list {
+  list-style: none;
+  padding: 0;
+}
+
+.message-item {
+  background: #fff; /* white message card */
+  padding: 1rem;
+  margin-bottom: 0.8rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(255, 105, 180, 0.2); /* soft pink shadow */
+  border-left: 4px solid #ff7ab8; /* accent */
+}
+
+.message-item.unread {
+  border-left: 4px solid #ff4081; /* brighter pink for unread */
+  background-color: #fff0f6;
+}
+
+.message-actions {
+  margin-top: 0.5rem;
+}
+
+.reply-btn {
+  background: #ff7ab8;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.reply-btn:hover {
+  background: #ff4081;
+}
+
+.reply-form {
+  background: #fff;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(255, 105, 180, 0.15);
+}
+
+.reply-form input,
+.reply-form textarea {
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #ffb6c1;
+  background: #fff;
+  color: #333;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.send-btn {
+  background: #ff4081;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.send-btn:hover {
+  background: #e91e63;
+}
+
+.cancel-btn {
+  background: #f8bbd0;
+  color: #333;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  margin-left: 10px;
+  cursor: pointer;
+}

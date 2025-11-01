@@ -1,3 +1,4 @@
+// frontend/src/pages/Register.jsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import '../styles/auth.css';
@@ -11,6 +12,7 @@ export default function Register() {
     role: "",
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,9 +21,10 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
-      const res = await fetch("/api/users/register", {
+      const res = await fetch("http://localhost:5000/api/users/register", { // 👈 URL complète
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -37,6 +40,8 @@ export default function Register() {
       navigate("/login");
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,6 +62,7 @@ export default function Register() {
               onChange={handleChange}
               required
               className="form-input"
+              disabled={loading}
             />
           </div>
 
@@ -70,6 +76,7 @@ export default function Register() {
               onChange={handleChange}
               required
               className="form-input"
+              disabled={loading}
             />
           </div>
 
@@ -83,6 +90,7 @@ export default function Register() {
               onChange={handleChange}
               required
               className="form-input"
+              disabled={loading}
             />
           </div>
 
@@ -94,6 +102,7 @@ export default function Register() {
               onChange={handleChange}
               required
               className="form-select"
+              disabled={loading}
             >
               <option value="">-- Sélectionnez votre rôle --</option>
               <option value="donateur">Donateur Individuel</option>
@@ -105,8 +114,12 @@ export default function Register() {
 
           {error && <p className="error-message">{error}</p>}
 
-          <button type="submit" className="auth-button">
-            S'inscrire
+          <button 
+            type="submit" 
+            className="auth-button"
+            disabled={loading}
+          >
+            {loading ? "Inscription..." : "S'inscrire"}
           </button>
         </form>
 

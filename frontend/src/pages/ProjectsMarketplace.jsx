@@ -108,7 +108,7 @@ const ProjectsMarketplace = () => {
         setError(null);
         console.log('🔄 Chargement des projets depuis le backend...');
         
-        const response = await fetch('http://localhost:4000/api/projects');
+        const response = await fetch('http://localhost:5000/api/projects');
         
         if (!response.ok) {
           throw new Error(`Erreur HTTP: ${response.status}`);

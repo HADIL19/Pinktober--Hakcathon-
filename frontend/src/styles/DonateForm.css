@@ -1,0 +1,82 @@
+.donate-form {
+  display: flex;
+  flex-direction: column; /* Stack labels & inputs vertically */
+  gap: 1rem; /* nice spacing between fields */
+  width: 100%;
+}
+
+/* Align labels directly above inputs */
+.donate-form label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.2rem;
+  display: block;
+}
+
+/* Card details row: expiry + CVV side by side */
+.card-details {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.card-details div {
+  flex: 1;
+}
+
+/* Inputs & textarea uniform style */
+.donate-form input,
+.donate-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.donate-form input:focus,
+.donate-form textarea:focus {
+  border-color: #a33969;
+  outline: none;
+}
+
+/* Message box */
+.donate-form textarea {
+  min-height: 70px;
+  resize: none;
+}
+
+/* Buttons */
+.donate-form button {
+  width: 100%;
+  background-color: #a33969;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.donate-form button:hover {
+  background-color: #b82e6d;
+}
+
+.cancel-btn {
+  background-color: #ccc !important;
+  color: #333;
+  margin-top: 0.3rem;
+}
+
+.cancel-btn:hover {
+  background-color: #aaa !important;
+}
+
+.modal{
+    background: rgb(249, 233, 233);
+    border-radius: 12px;
+    padding: 2rem;
+    width: 990px;
+    max-width: 90%;
+}

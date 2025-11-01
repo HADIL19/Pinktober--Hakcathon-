@@ -1,0 +1,401 @@
+/* 🌸 Palette harmonisée */
+:root {
+  --primary: #9b4965;
+  --primary-light: #f2c4cf;
+  --primary-dark: #732d48;
+  --accent: #ff9eb4;
+  --secondary: #64748B;
+  --success: #059669;
+  --warning: #D97706;
+  --error: #DC2626;
+  --background: #ffffff;
+  --surface: #ffffff;
+  --border: #e5e7eb;
+  --text-primary: #1E293B;
+  --text-secondary: #64748B;
+  --text-tertiary: #94A3B8;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+/* 🌺 Page principale */
+.sponsors-page {
+  background: var(--background);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--text-primary);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* 💖 Hero Section */
+.sponsors-hero {
+  background: radial-gradient(circle at 30% 30%, var(--accent), var(--primary-dark));
+  padding: 50px 20px 60px; /* 🔽 Réduction du padding haut/bas */
+  text-align: center;
+  color: #fff;
+  border-bottom: 5px solid var(--primary-dark);
+  animation: fadeInUp 1s ease-in-out;
+}
+
+
+.hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-icon {
+  font-size: 3.2rem;
+  margin-bottom: 12px;
+}
+
+.sponsors-hero h1 {
+  font-size: 2.6rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.sponsors-hero {
+  display: flex;               /* make it a flex container */
+  flex-direction: column;      /* stack content vertically */
+  align-items: center;         /* center horizontally */
+  justify-content: center;     /* center vertically */
+  min-height: 80vh;            /* make it taller so it fills viewport */
+  background: radial-gradient(circle at 30% 30%, var(--accent), var(--primary-dark));
+  padding: 50px 20px 60px;
+  text-align: center;
+  color: #fff;
+  border-bottom: 5px solid var(--primary-dark);
+  animation: fadeInUp 1s ease-in-out;
+}
+
+
+/* 📊 Stats */
+.sponsors-stats {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin: 30px 0; /* less bottom margin, more top margin */
+  flex-wrap: wrap;
+}
+
+
+.stat-item {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 22px 30px;
+  border-radius: 18px;
+  backdrop-filter: blur(8px);
+  text-align: center;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.stat-number {
+  font-size: 2.1rem;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #f1f1f1;
+}
+
+/* 💝 Bouton principal */
+.become-sponsor-btn {
+  background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+  color: #fff;
+  border: none;
+  padding: 15px 32px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  box-shadow: 0 6px 16px rgba(155, 73, 101, 0.4);
+}
+
+.become-sponsor-btn:hover {
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 158, 180, 0.4);
+}
+
+/* 🧭 Onglets */
+.sponsors-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  background: var(--surface);
+  padding: 25px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-btn {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  font-weight: 600;
+}
+
+.tab-btn:hover {
+  background: var(--primary-light);
+}
+
+.tab-btn.active {
+  background: var(--primary);
+  color: white;
+}
+
+/* 🧩 Sections */
+.sponsors-section {
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.section-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.section-header p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+/* 💎 Catégories de sponsors */
+.tier-section {
+  margin-bottom: 60px;
+}
+
+.tier-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.tier-badge {
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  color: #fff;
+}
+
+.platinum { background: linear-gradient(45deg, #E5E4E2, #cfcfcf); color: #000; }
+.gold { background: linear-gradient(45deg, #FFD700, #E6C200); }
+.silver { background: linear-gradient(45deg, #C0C0C0, #A9A9A9); }
+.bronze { background: linear-gradient(45deg, #cd7f32, #b87333); }
+
+.tier-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+/* 🧱 Grille de sponsors */
+.sponsors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+/* 🩷 Carte Sponsor */
+.sponsor-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 25px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.sponsor-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.sponsor-logo {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-weight: 700;
+  font-size: 1.8rem;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 15px;
+}
+
+.sponsor-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.sponsor-description {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  min-height: 40px;
+}
+
+.sponsor-amount {
+  margin: 15px 0;
+}
+
+.amount-value {
+  color: var(--primary-dark);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.amount-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* 🏷️ Tags catégories */
+.sponsor-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.category-tag {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* 🔗 Footer de la carte */
+.sponsor-footer {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.sponsor-link {
+  text-decoration: none;
+  color: var(--primary);
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.sponsor-link:hover {
+  color: var(--primary-dark);
+}
+
+/* 📦 Items sponsorisés */
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.item-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.item-name {
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin-bottom: 5px;
+}
+
+.item-sponsor {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.item-category {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+}
+
+/* 🔄 Loading + Erreur */
+.loading-container, .error-container {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.loading-spinner {
+  border: 4px solid var(--primary-light);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-icon {
+  font-size: 3rem;
+}
+
+.error-container h3 {
+  color: var(--error);
+}
+
+.error-container p {
+  color: var(--text-secondary);
+}
+
+/* ✨ Animation Hero */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

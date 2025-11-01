@@ -6,11 +6,11 @@ import Donateur from "./pages/Donateur";
 import Sponsor from "./pages/Sponsor";
 import Investisseur from "./pages/Investisseur";
 import PorteurProjet from "./pages/PorteurProjet";
-
-import ProjectsMarketplace from "./components/ProjectsMarketplace";
+import ProjectsMarketplace from "./pages/ProjectsMarketplace"; // 👈 Changez ce chemin
 import ProjectDetails from './components/ProjectDetails';
 import InvestmentForm from './components/InvestmentForm';
-
+import SponsorsPage from './pages/Sponsor';
+import SponsorRequestForm from './components/SponsorRequestForm';
 
 export default function App() {
   return (
@@ -18,19 +18,20 @@ export default function App() {
       <div className="flex flex-col min-h-screen">
         <Routes>
           <Route path="/" element={<Home />} />
-         
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/donateur" element={<Donateur />} />
           <Route path="/sponsor" element={<Sponsor />} />
           <Route path="/investisseur" element={<Investisseur />} />
           <Route path="/porteur-projet" element={<PorteurProjet />} />
-          <Route path="/ProjectsMarketplace" element={<ProjectsMarketplace />} />
+          <Route path="/marketplace" element={<ProjectsMarketplace />} /> {/* 👈 Route corrigée */}
           <Route path="/project/:id" element={<ProjectDetails />} />
           <Route path="/invest/:id" element={<InvestmentForm />} />
-          
+
+          <Route path="/sponsors" element={<SponsorsPage />} />
+         <Route path="/sponsor-request" element={<SponsorRequestForm />} />
+
         </Routes>
-        
       </div>
     </Router>
   );
