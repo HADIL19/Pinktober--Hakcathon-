@@ -2,6 +2,12 @@ import express from "express";
 import cors from "cors";
 import projectRoutes from "./routes/projectRoutes.js";
 import userRoutes from "./routes/userRoutes.js"; // ✅ Add this line
+import investmentRoutes from './routes/investmentRoutes.js';
+import messages from './routes/messages.js'
+import dashboardRoutes from './routes/dashboard.js';
+import investorRoutes from './routes/investor.js';
+import projectPrismaRoutes from './routes/projects-prisma.js';
+import initDbRoutes from './routes/init-db.js';
 
 const app = express();
 
@@ -40,5 +46,11 @@ app.get("/", (req, res) => {
     },
   });
 });
+app.use('/api/investments', investmentRoutes);
+app.use('/api/messages', messages);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/investor', investorRoutes);
+app.use("/api/projects-prisma", projectPrismaRoutes);
+app.use("/api/init", initDbRoutes);
 
 export default app;

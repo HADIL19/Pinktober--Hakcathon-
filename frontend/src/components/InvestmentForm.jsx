@@ -1,3 +1,4 @@
+// src/components/InvestmentForm.jsx
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './InvestmentForm.css';
@@ -26,16 +27,34 @@ const InvestmentForm = () => {
     setLoading(true);
 
     try {
-      // Simulation d'envoi vers le backend
-      console.log('💰 Données d\'investissement:', { projectId: id, ...investment });
-      
-      // Simuler un délai de traitement
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      alert(`✅ Investissement de ${investment.amount}€ envoyé avec succès !\n\nVous recevrez un email de confirmation.`);
-      navigate('/ProjectsMarketplace');
+      // Envoi réel vers le backend
+      const response = await fetch('http://localhost:4000/api/investments/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          projectId: id,
+          amount: investment.amount === 'custom' ? investment.customAmount : investment.amount,
+          investor: investment.investorName,
+          contactEmail: investment.email,
+          phone: investment.phone,
+          message: investment.message,
+          terms: 'acceptés' // Vous pouvez ajouter une checkbox pour les termes si besoin
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(`✅ Investissement de ${investment.amount === 'custom' ? investment.customAmount : investment.amount}€ envoyé avec succès !\n\nVous recevrez un email de confirmation.`);
+        navigate('/ProjectsMarketplace');
+      } else {
+        throw new Error(result.error || 'Erreur lors de l\'envoi');
+      }
     } catch (error) {
-      alert('❌ Erreur lors de l\'envoi. Veuillez réessayer.');
+      console.error('Erreur soumission:', error);
+      alert(`❌ Erreur lors de l'envoi: ${error.message}\n\nVeuillez réessayer.`);
     } finally {
       setLoading(false);
     }
@@ -87,7 +106,7 @@ const InvestmentForm = () => {
                   placeholder="Entrez le montant"
                   min="100"
                   step="100"
-                  onChange={(e) => setInvestment({...investment, amount: e.target.value})}
+                  onChange={(e) => setInvestment({...investment, customAmount: e.target.value})}
                 />
               </div>
             )}
@@ -157,9 +176,9 @@ const InvestmentForm = () => {
             <button 
               type="submit" 
               className="btn-primary"
-              disabled={loading || !investment.amount || !investment.investorName || !investment.email}
+              disabled={loading || !investment.amount || !investment.investorName || !investment.email || (investment.amount === 'custom' && !investment.customAmount)}
             >
-              {loading ? 'Traitement...' : `Investir ${investment.amount === 'custom' ? '' : investment.amount + '€'}`}
+              {loading ? 'Envoi en cours...' : `Investir ${investment.amount === 'custom' ? '' : investment.amount + '€'}`}
             </button>
           </div>
         </form>

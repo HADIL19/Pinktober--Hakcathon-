@@ -1,223 +1,207 @@
-// backend/src/models/Project.js
-import pool from '../config/database.js';
+// backend/src/routes/projects.js
+import express from 'express';
+import { PrismaClient } from '@prisma/client';
 
-export const Project = {
-  // ✅ Récupérer tous les projets avec filtres
-  async findAll(filters = {}, pagination = { page: 1, limit: 12 }) {
-    const {
-      search,
-      domain,
-      stage,
-      investmentType,
-      location,
-      innovationLevel,
-      minBudget,
-      maxBudget,
-      minDuration,
-      maxDuration,
-      minScore,
-      sortBy = 'score'
-    } = filters;
+const router = express.Router();
+const prisma = new PrismaClient();
 
-    let whereConditions = ['status IN ("approved", "funding", "active")'];
-    let params = [];
-
-    // Filtre recherche texte
-    if (search) {
-      whereConditions.push('(title LIKE ? OR description LIKE ? OR researcher LIKE ?)');
-      params.push(`%${search}%`, `%${search}%`, `%${search}%`);
-    }
-
-    // Filtres simples
-    if (domain) {
-      whereConditions.push('domain = ?');
-      params.push(domain);
-    }
-    if (stage) {
-      whereConditions.push('stage = ?');
-      params.push(stage);
-    }
-    if (investmentType) {
-      whereConditions.push('investment_type = ?');
-      params.push(investmentType);
-    }
-    if (location) {
-      whereConditions.push('location = ?');
-      params.push(location);
-    }
-    if (innovationLevel) {
-      whereConditions.push('innovation_level = ?');
-      params.push(innovationLevel);
-    }
-    if (minScore) {
-      whereConditions.push('score >= ?');
-      params.push(parseInt(minScore));
-    }
-
-    // Filtres budget
-    if (minBudget) {
-      whereConditions.push('budget >= ?');
-      params.push(parseInt(minBudget));
-    }
-    if (maxBudget) {
-      whereConditions.push('budget <= ?');
-      params.push(parseInt(maxBudget));
-    }
-
-    // Filtres durée
-    if (minDuration) {
-      whereConditions.push('duration >= ?');
-      params.push(parseInt(minDuration));
-    }
-    if (maxDuration) {
-      whereConditions.push('duration <= ?');
-      params.push(parseInt(maxDuration));
-    }
-
-    // Options de tri
-    let orderBy = 'score DESC';
-    switch (sortBy) {
-      case 'funding':
-        orderBy = 'funding DESC';
-        break;
-      case 'budget':
-        orderBy = 'budget DESC';
-        break;
-      case 'date':
-        orderBy = 'created_at DESC';
-        break;
-      default:
-        orderBy = 'score DESC';
-    }
-
-    // Pagination
-    const offset = (pagination.page - 1) * pagination.limit;
-
-    // Requête SQL
-    const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
+// Route principale POUR PRISMA UNIQUEMENT
+router.get('/', async (req, res) => {
+  try {
+    console.log('🎯 Route /api/projects - Récupération depuis PRISMA');
     
-    const query = `
-      SELECT 
-        id, title, description, summary, researcher, institution,
-        domain, stage, budget, duration, investment_type as investmentType,
-        location, innovation_level as innovationLevel, score, funding,
-        is_featured as isFeatured, tags, status, views, created_at as createdAt
-      FROM projects 
-      ${whereClause}
-      ORDER BY ${orderBy}
-      LIMIT ? OFFSET ?
-    `;
+    const projects = await prisma.project.findMany({
+      include: {
+        owner: {
+          select: {
+            name: true,
+            company: true
+          }
+        },
+        tags: true
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
 
-    const countQuery = `
-      SELECT COUNT(*) as totalCount 
-      FROM projects 
-      ${whereClause}
-    `;
+    console.log(`📊 ${projects.length} projets trouvés dans PRISMA`);
 
-    try {
-      // Exécuter les requêtes
-      const [projects] = await pool.execute([...params, pagination.limit, offset]);
-      const [countResult] = await pool.execute([...params]);
-      
-      const totalCount = countResult[0].totalCount;
-      const totalPages = Math.ceil(totalCount / pagination.limit);
+    if (projects.length === 0) {
+      console.log('⚠️ Base de données vide - aucun projet dans Prisma');
+      return res.json({
+        success: true,
+        data: [],
+        count: 0,
+        message: "Aucun projet dans la base de données. Utilisez /create-sample-projects pour en créer."
+      });
+    }
+
+    // Transformer les données PRISMA
+    const transformedProjects = projects.map(project => {
+      console.log('🔍 Projet Prisma:', {
+        id: project.id,
+        title: project.title,
+        domain: project.domain, // Doit être en MAJUSCULES (IMMUNOTHERAPY)
+        stage: project.stage,   // Doit être en MAJUSCULES (CLINICAL_TRIALS_PHASE_1)
+        tags: project.tags.map(t => t.tag)
+      });
 
       return {
-        projects,
-        pagination: {
-          currentPage: pagination.page,
-          totalPages,
-          totalCount,
-          hasMore: pagination.page < totalPages
-        }
+        id: project.id,
+        title: project.title,
+        description: project.description,
+        budget: project.budget,
+        duration: project.duration,
+        domain: project.domain, // VOS ENUMS PRISMA
+        stage: project.stage,   // VOS ENUMS PRISMA  
+        funding: project.funding,
+        tags: project.tags.map(tag => tag.tag),
+        investmentType: project.investmentType, // VOS ENUMS PRISMA
+        location: project.location,
+        innovationLevel: project.innovationLevel, // VOS ENUMS PRISMA
+        isFeatured: project.isFeatured,
+        score: project.score,
+        researcher: project.owner?.name || 'Chercheur inconnu',
+        institution: project.owner?.company || 'Institution inconnue',
+        createdAt: project.createdAt
       };
+    });
 
-    } catch (error) {
-      throw new Error(`Database error: ${error.message}`);
-    }
-  },
+    res.json({
+      success: true,
+      data: transformedProjects,
+      count: transformedProjects.length,
+      source: 'PRISMA_DATABASE'
+    });
 
-  // ✅ Récupérer un projet par ID
-  async findById(id) {
-    const query = `
-      SELECT 
-        id, title, description, summary, researcher, institution,
-        domain, stage, budget, duration, investment_type as investmentType,
-        location, innovation_level as innovationLevel, score, funding,
-        is_featured as isFeatured, tags, status, views, created_at as createdAt
-      FROM projects 
-      WHERE id = ?
-    `;
-
-    try {
-      const [projects] = await pool.execute(query, [id]);
-      return projects[0] || null;
-    } catch (error) {
-      throw new Error(`Database error: ${error.message}`);
-    }
-  },
-
-  // ✅ Incrémenter les vues d'un projet
-  async incrementViews(id) {
-    const query = 'UPDATE projects SET views = views + 1 WHERE id = ?';
-    
-    try {
-      await pool.execute(query, [id]);
-    } catch (error) {
-      throw new Error(`Database error: ${error.message}`);
-    }
-  },
-
-  // ✅ Récupérer les statistiques des projets
-  async getStats() {
-    const queries = {
-      totalProjects: 'SELECT COUNT(*) as count FROM projects WHERE status IN ("approved", "funding", "active")',
-      featuredProjects: 'SELECT COUNT(*) as count FROM projects WHERE is_featured = true AND status IN ("approved", "funding", "active")',
-      totalBudget: 'SELECT SUM(budget) as total FROM projects WHERE status IN ("approved", "funding", "active")',
-      avgFunding: 'SELECT AVG(funding) as average FROM projects WHERE status IN ("approved", "funding", "active")'
-    };
-
-    try {
-      const [totalResult] = await pool.execute(queries.totalProjects);
-      const [featuredResult] = await pool.execute(queries.featuredProjects);
-      const [budgetResult] = await pool.execute(queries.totalBudget);
-      const [fundingResult] = await pool.execute(queries.avgFunding);
-
-      return {
-        totalProjects: totalResult[0].count,
-        featuredProjects: featuredResult[0].count,
-        totalBudget: budgetResult[0].total || 0,
-        avgFunding: fundingResult[0].average || 0
-      };
-    } catch (error) {
-      throw new Error(`Database error: ${error.message}`);
-    }
-  },
-
-  // ✅ Récupérer les statistiques de la plateforme
-  async getPlatformStats() {
-    const queries = {
-      activeProjects: 'SELECT COUNT(*) as count FROM projects WHERE status IN ("approved", "funding", "active")',
-      completedProjects: 'SELECT COUNT(*) as count FROM projects WHERE status = "completed"',
-      totalCapital: 'SELECT SUM(budget) as total FROM projects WHERE status IN ("approved", "funding", "active", "completed")',
-      avgScore: 'SELECT AVG(score) as average FROM projects WHERE status IN ("approved", "funding", "active", "completed")'
-    };
-
-    try {
-      const [activeResult] = await pool.execute(queries.activeProjects);
-      const [completedResult] = await pool.execute(queries.completedProjects);
-      const [capitalResult] = await pool.execute(queries.totalCapital);
-      const [scoreResult] = await pool.execute(queries.avgScore);
-
-      return {
-        activeProjects: activeResult[0].count,
-        completedProjects: completedResult[0].count,
-        totalCapital: capitalResult[0].total || 28500000,
-        avgScore: scoreResult[0].average || 85,
-        successRate: 94 // Taux fixe pour l'instant
-      };
-    } catch (error) {
-      throw new Error(`Database error: ${error.message}`);
-    }
+  } catch (error) {
+    console.error('❌ Erreur récupération projets Prisma:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erreur base de données',
+      details: error.message
+    });
   }
-};
+});
+
+// Route pour vider et recréer les projets
+router.post('/reset-projects', async (req, res) => {
+  try {
+    console.log('🔄 Reset des projets...');
+    
+    // Supprimer tous les projets existants
+    await prisma.projectTag.deleteMany({});
+    await prisma.project.deleteMany({});
+    
+    console.log('✅ Anciens projets supprimés');
+    
+    // Créer un chercheur si nécessaire
+    let researcher = await prisma.user.findFirst({
+      where: { role: 'RESEARCHER' }
+    });
+
+    if (!researcher) {
+      researcher = await prisma.user.create({
+        data: {
+          email: 'dr.lambert@institut-curie.fr',
+          password: 'temp123',
+          name: 'Dr. Marie Lambert',
+          role: 'RESEARCHER',
+          company: 'Institut Curie',
+          isVerified: true
+        }
+      });
+      console.log('✅ Chercheur créé:', researcher.id);
+    }
+
+    // Projets avec les bons enums PRISMA
+    const sampleProjects = [
+      {
+        title: "Immuno-Thérapie CAR-T Personnalisée",
+        description: "Développement de thérapies CAR-T personnalisées pour le cancer du sein triple négatif. Approche innovante ciblant les cellules cancéreuses résistantes.",
+        budget: 2100000,
+        duration: 36,
+        funding: 35,
+        domain: "IMMUNOTHERAPY", // ENUM PRISMA
+        stage: "CLINICAL_TRIALS_PHASE_1", // ENUM PRISMA
+        status: "ACTIVE",
+        investmentType: "EQUITY", // ENUM PRISMA
+        location: "Paris, France",
+        score: 92,
+        isFeatured: true,
+        innovationLevel: "BREAKTHROUGH", // ENUM PRISMA
+        ownerId: researcher.id,
+        tags: ["CAR-T", "immunothérapie", "personnalisé", "sein"]
+      },
+      {
+        title: "IA de Diagnostic Précoce par Imagerie 3D",
+        description: "Plateforme d'intelligence artificielle pour la détection précoce des cancers par imagerie médicale 3D. Algorithmes avancés de computer vision.",
+        budget: 1800000,
+        duration: 24,
+        funding: 25,
+        domain: "AI_DIAGNOSTIC", // ENUM PRISMA
+        stage: "PRE_CLINICAL", // ENUM PRISMA
+        status: "ACTIVE", 
+        investmentType: "EQUITY", // ENUM PRISMA
+        location: "Boston, USA",
+        score: 88,
+        isFeatured: true,
+        innovationLevel: "BREAKTHROUGH", // ENUM PRISMA
+        ownerId: researcher.id,
+        tags: ["IA", "diagnostic", "imagerie", "3D", "précoce"]
+      },
+      {
+        title: "Plateforme de Radiomique Avancée",
+        description: "Solution de radiomique pour l'analyse quantitative des images médicales. Intégration AI pour la prédiction de réponse au traitement.",
+        budget: 1500000,
+        duration: 30,
+        funding: 40,
+        domain: "AI_DIAGNOSTIC", // ENUM PRISMA
+        stage: "CLINICAL_TRIALS_PHASE_2", // ENUM PRISMA
+        status: "ACTIVE",
+        investmentType: "EQUITY", // ENUM PRISMA
+        location: "Lyon, France",
+        score: 85,
+        isFeatured: false,
+        innovationLevel: "PLATFORM", // ENUM PRISMA
+        ownerId: researcher.id,
+        tags: ["radiomique", "analyse", "quantitative", "suivi"]
+      }
+    ];
+
+    const createdProjects = [];
+    
+    for (const projectData of sampleProjects) {
+      const { tags, ...projectInfo } = projectData;
+      
+      const project = await prisma.project.create({
+        data: {
+          ...projectInfo,
+          tags: {
+            create: tags.map(tag => ({ tag }))
+          }
+        }
+      });
+      createdProjects.push(project);
+      console.log(`✅ Projet créé: ${project.title} (ID: ${project.id})`);
+    }
+
+    res.json({
+      success: true,
+      message: `${createdProjects.length} projets créés dans PRISMA`,
+      projects: createdProjects.map(p => ({ 
+        id: p.id, 
+        title: p.title,
+        domain: p.domain,
+        stage: p.stage 
+      }))
+    });
+
+  } catch (error) {
+    console.error('❌ Erreur reset projets:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+export default router;

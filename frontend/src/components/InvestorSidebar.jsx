@@ -10,7 +10,7 @@ const InvestorSidebar = () => {
 
   const navItems = [
     { path: '/ProjectsMarketplace', icon: '🔍', label: 'Projets' },
-    { path: '/contacts', icon: '💼', label: 'Mes Investissements' },
+    { path: '/contacts', icon: '💼', label: 'Mes Contacts' },
     { path: '/Investisseur', icon: '👤', label: 'Profil' },
   ];
 

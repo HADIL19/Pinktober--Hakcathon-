@@ -1,3 +1,4 @@
+// schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,51 +9,321 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  name      String?
-  role      String   @default("user")
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  password   String
+  name       String?
+  role       UserRole @default(INVESTOR)
+  avatar     String?
+  phone      String?
+  company    String?
+  bio        String?
+  isVerified Boolean  @default(false)
+
+  // Relations
+  projectsOwned    Project[]      @relation("ProjectOwner")
+  projectsDonated  Donation[]
+  sentMessages     Message[]      @relation("MessageSender")
+  receivedMessages Message[]      @relation("MessageReceiver")
+  notifications    Notification[]
+
+  // Timestamps
   createdAt DateTime @default(now())
-  projects  Project[]
-  donations Donation[]
+  updatedAt DateTime @updatedAt
 }
 
 model Project {
-  id          Int      @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   title       String
   description String?
-  budget      Float?   @default(0)
-  duration    Int?     @default(24)  // en mois
+  budget      Float?  @default(0)
+  duration    Int?    @default(24) // en mois
+  funding     Float?  @default(0) // pourcentage financé
+
+  // Nouveaux champs pour la marketplace
+  domain          ProjectDomain? // domaine de recherche
+  stage           ProjectStage? // stade du projet
+  status          ProjectStatus    @default(ACTIVE)
+  investmentType  InvestmentType?
+  location        String?
+  score           Int?             @default(0) // score IA
+  isFeatured      Boolean          @default(false)
+  innovationLevel InnovationLevel?
+
+  // Relations
   ownerId     Int
-  owner       User     @relation(fields: [ownerId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  owner       User              @relation("ProjectOwner", fields: [ownerId], references: [id])
   investments Investment[]
   donations   Donation[]
-  
-  // Nouveaux champs pour la marketplace
-  domain      String?  // domaine de recherche
-  stage       String?  // stade du projet
-  status      String   @default("active") // active, completed, cancelled
-  location    String?  // localisation
-}
+  messages    Message[]
+  tags        ProjectTag[]
+  documents   ProjectDocument[]
 
-model Donation {
-  id        Int      @id @default(autoincrement())
-  amount    Float
-  userId    Int
-  projectId Int
+  // AJOUTEZ CES RELATIONS POUR LE DASHBOARD
+  milestones ProjectMilestone[]
+  kpis       ProjectKPI[]
+  progress   ProjectProgress?
+  financials ProjectFinancial?
+
+  // Timestamps
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
-  project   Project  @relation(fields: [projectId], references: [id])
+  updatedAt DateTime @updatedAt
 }
 
 model Investment {
-  id        Int      @id @default(autoincrement())
-  amount    Float
-  investor  String
+  id           Int              @id @default(autoincrement())
+  amount       Float
+  investor     String
+  type         InvestmentType?
+  status       InvestmentStatus @default(PENDING)
+  contactEmail String?
+  phone        String?
+  message      String?
+  terms        String?
+
+  // Relations
   projectId Int
-  project   Project  @relation(fields: [projectId], references: [id])
+  project   Project @relation(fields: [projectId], references: [id])
+
+  // Review
+  reviewNotes String?
+  reviewedBy  Int? // User ID qui a review
+  reviewedAt  DateTime?
+
+  // Timestamps
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Donation {
+  id     Int            @id @default(autoincrement())
+  amount Float
+  status DonationStatus @default(COMPLETED)
+
+  // Relations
+  userId    Int
+  projectId Int
+  user      User    @relation(fields: [userId], references: [id])
+  project   Project @relation(fields: [projectId], references: [id])
+
+  // Timestamps
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id      Int     @id @default(autoincrement())
+  content String  @db.Text
+  subject String? @db.VarChar(500)
+  isRead  Boolean @default(false)
+
+  // Relations
+  senderId   Int
+  receiverId Int
+  projectId  Int?
+
+  sender   User     @relation("MessageSender", fields: [senderId], references: [id])
+  receiver User     @relation("MessageReceiver", fields: [receiverId], references: [id])
+  project  Project? @relation(fields: [projectId], references: [id])
+
+  // Attachments
+  attachments MessageAttachment[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+}
+
+model MessageAttachment {
+  id   Int     @id @default(autoincrement())
+  name String
+  url  String
+  type String?
+
+  // Relations
+  messageId Int
+  message   Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id      Int              @id @default(autoincrement())
+  type    NotificationType
+  title   String
+  message String
+  isRead  Boolean          @default(false)
+
+  // Relations
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  // Lien vers l'entité concernée
+  entityType String? // 'project', 'investment', 'message'
+  entityId   Int?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+}
+
+model ProjectTag {
+  id  Int    @id @default(autoincrement())
+  tag String
+
+  // Relations
+  projectId Int
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, tag])
+}
+
+model ProjectDocument {
+  id   Int     @id @default(autoincrement())
+  name String
+  url  String
+  type String?
+
+  // Relations
+  projectId Int
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+// ENUMS
+
+enum UserRole {
+  INVESTOR
+  RESEARCHER
+  ADMIN
+}
+
+enum ProjectDomain {
+  IMMUNOTHERAPY
+  EARLY_DETECTION
+  TARGETED_THERAPY
+  GENOMICS
+  AI_DIAGNOSTIC
+  PERSONALIZED_MEDICINE
+  DRUG_DISCOVERY
+}
+
+enum ProjectStage {
+  BASIC_RESEARCH
+  PRE_CLINICAL
+  CLINICAL_TRIALS_PHASE_1
+  CLINICAL_TRIALS_PHASE_2
+  CLINICAL_TRIALS_PHASE_3
+  IMPLEMENTATION
+}
+
+enum ProjectStatus {
+  DRAFT
+  PENDING
+  ACTIVE
+  FUNDED
+  COMPLETED
+  CANCELLED
+}
+
+enum InvestmentType {
+  EQUITY
+  GRANT
+  LOAN
+  DONATION
+}
+
+enum InnovationLevel {
+  BREAKTHROUGH
+  INCREMENTAL
+  PLATFORM
+  DISRUPTIVE
+}
+
+enum InvestmentStatus {
+  PENDING
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  COMPLETED
+}
+
+enum DonationStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum NotificationType {
+  MESSAGE
+  INVESTMENT
+  PROJECT_UPDATE
+  DONATION
+  SYSTEM
+}
+
+// Ajoutez ces modèles à votre schema.prisma
+
+model ProjectMilestone {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  dueDate     DateTime
+  completed   Boolean   @default(false)
+  completedAt DateTime?
+
+  // Relations
+  projectId Int
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProjectKPI {
+  id     Int     @id @default(autoincrement())
+  name   String
+  value  Float
+  target Float
+  unit   String?
+
+  // Relations
+  projectId Int
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProjectProgress {
+  id         Int   @id @default(autoincrement())
+  overall    Float @default(0) // 0-100%
+  timeline   Float @default(0) // 0-100%
+  budget     Float @default(0) // 0-100%
+  milestones Float @default(0) // 0-100%
+
+  // Relations
+  projectId Int     @unique
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProjectFinancial {
+  id              Int   @id @default(autoincrement())
+  totalBudget     Float
+  spent           Float @default(0)
+  remaining       Float
+  fundingProgress Float @default(0) // 0-100%
+
+  // Relations
+  projectId Int     @unique
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

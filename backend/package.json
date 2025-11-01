@@ -19,7 +19,10 @@
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev --name init"
+    "prisma:migrate": "prisma migrate dev --name init",
+    "create-projects": "node src/scripts/createSampleProjects.js",
+    "create-dashboard": "node src/scripts/createDashboardData.js",
+    "setup-db": "npm run create-projects && npm run create-dashboard"
   }
 }
 

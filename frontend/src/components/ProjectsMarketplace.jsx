@@ -3,7 +3,6 @@ import './ProjectsMarketplace.css';
 import { useNavigate } from 'react-router-dom';
 
 const ProjectsMarketplace = () => {
-  // États pour les filtres
   const [filters, setFilters] = useState({
     searchQuery: '',
     budget: '',
@@ -18,16 +17,15 @@ const ProjectsMarketplace = () => {
 
   const [activeTags, setActiveTags] = useState([]);
   const [sortBy, setSortBy] = useState('score');
-  const [currentPage, setCurrentPage] = useState(1);
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [dataSource, setDataSource] = useState('Chargement...');
   const navigate = useNavigate();
-  
 
-  // Filtres disponibles
+  // Filtres disponibles - ADAPTÉS À PRISMA
   const filterOptions = {
     budget: [
       { value: '', label: 'Budget' },
@@ -39,18 +37,17 @@ const ProjectsMarketplace = () => {
     ],
     domain: [
       { value: '', label: 'Domaine' },
-      { value: 'immunotherapy', label: 'Immunothérapie' },
-      { value: 'early_detection', label: 'Détection Précoce' },
-      { value: 'targeted_therapy', label: 'Thérapie Ciblée' },
-      { value: 'genomics', label: 'Génomique' },
-      { value: 'ai_diagnostic', label: 'IA et Diagnostic' }
+      { value: 'IMMUNOTHERAPY', label: 'Immunothérapie' },
+      { value: 'AI_DIAGNOSTIC', label: 'IA et Diagnostic' },
+      { value: 'GENOMICS', label: 'Génomique' },
+      { value: 'TARGETED_THERAPY', label: 'Thérapie Ciblée' }
     ],
     stage: [
       { value: '', label: 'Stade' },
-      { value: 'basic_research', label: 'Recherche Fondamentale' },
-      { value: 'pre_clinical', label: 'Pré-clinique' },
-      { value: 'clinical_trials', label: 'Essais Cliniques' },
-      { value: 'implementation', label: 'Implémentation' }
+      { value: 'BASIC_RESEARCH', label: 'Recherche Fondamentale' },
+      { value: 'PRE_CLINICAL', label: 'Pré-clinique' },
+      { value: 'CLINICAL_TRIALS_PHASE_1', label: 'Essais Cliniques Phase 1' },
+      { value: 'CLINICAL_TRIALS_PHASE_2', label: 'Essais Cliniques Phase 2' }
     ],
     duration: [
       { value: '', label: 'Durée' },
@@ -61,9 +58,7 @@ const ProjectsMarketplace = () => {
     ],
     investmentType: [
       { value: '', label: 'Type' },
-      { value: 'equity', label: 'Capital' },
-      { value: 'grant', label: 'Subvention' },
-      { value: 'loan', label: 'Prêt' }
+      { value: 'EQUITY', label: 'Capital' }
     ],
     aiScore: [
       { value: '', label: 'Score IA' },
@@ -73,16 +68,15 @@ const ProjectsMarketplace = () => {
     ],
     location: [
       { value: '', label: 'Localisation' },
-      { value: 'europe', label: 'Europe' },
-      { value: 'north_america', label: 'Amérique du Nord' },
       { value: 'france', label: 'France' },
-      { value: 'usa', label: 'États-Unis' }
+      { value: 'usa', label: 'États-Unis' },
+      { value: 'europe', label: 'Europe' }
     ],
     innovationLevel: [
       { value: '', label: 'Innovation' },
-      { value: 'breakthrough', label: 'Révolutionnaire' },
-      { value: 'incremental', label: 'Incrémental' },
-      { value: 'platform', label: 'Plateforme' }
+      { value: 'BREAKTHROUGH', label: 'Révolutionnaire' },
+      { value: 'PLATFORM', label: 'Plateforme' },
+      { value: 'DISRUPTIVE', label: 'Disruptif' }
     ]
   };
 
@@ -93,43 +87,69 @@ const ProjectsMarketplace = () => {
     { value: 'budget', label: 'Budget' }
   ];
 
-  const quickFilterTags = [
-    { id: 'equity_available', label: 'Equity Disponible' },
-    { id: 'clinical_trials', label: 'Essais Cliniques' },
-    { id: 'ai_focused', label: 'IA & Data' },
-    { id: 'europe', label: 'Europe' }
-  ];
-
-  // Chargement initial des projets depuis l'API
+  // Chargement des projets avec détection de source
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         setLoading(true);
         setError(null);
-        console.log('🔄 Chargement des projets depuis le backend...');
+        console.log('🔄 Tentative de chargement depuis Prisma...');
         
-        const response = await fetch('http://localhost:4000/api/projects');
+        // Essayer d'abord Prisma
+        const response = await fetch('http://localhost:4000/api/projects-prisma');
         
         if (!response.ok) {
           throw new Error(`Erreur HTTP: ${response.status}`);
         }
         
         const data = await response.json();
+        console.log('📦 Réponse Prisma:', data);
         
         if (data.success) {
-          console.log(`✅ ${data.data.length} projets chargés depuis l'API`);
-          setProjects(data.data);
-          setFilteredProjects(data.data);
+          if (data.data.length > 0) {
+            // Données Prisma trouvées
+            console.log(`✅ ${data.data.length} projets chargés depuis PRISMA`);
+            setProjects(data.data);
+            setFilteredProjects(data.data);
+            setDataSource(data.source || 'PRISMA_DATABASE');
+          } else {
+            // Prisma vide, utiliser l'API normale
+            console.log('⚠️ Prisma vide, utilisation API normale');
+            await loadFromNormalAPI();
+          }
         } else {
-          throw new Error(data.message || 'Erreur inconnue du serveur');
+          throw new Error(data.message || 'Erreur serveur');
         }
       } catch (error) {
-        console.error('❌ Erreur de connexion au backend:', error);
-        setError('Impossible de charger les projets. Vérifiez que le serveur est démarré.');
-        setProjects([]);
-        setFilteredProjects([]);
+        console.error('❌ Erreur Prisma:', error);
+        // Fallback vers l'API normale
+        await loadFromNormalAPI();
       } finally {
         setLoading(false);
+      }
+    };
+
+    const loadFromNormalAPI = async () => {
+      try {
+        console.log('🔄 Chargement depuis API normale...');
+        const response = await fetch('http://localhost:4000/api/projects');
+        const data = await response.json();
+        
+        if (data.success) {
+          console.log(`✅ ${data.data.length} projets chargés depuis API normale`);
+          const projectsWithSource = data.data.map(p => ({ ...p, source: 'STATIC_API' }));
+          setProjects(projectsWithSource);
+          setFilteredProjects(projectsWithSource);
+          setDataSource('STATIC_API');
+        } else {
+          throw new Error('Impossible de charger les projets');
+        }
+      } catch (fallbackError) {
+        console.error('❌ Erreur API normale:', fallbackError);
+        setError('Impossible de charger les projets depuis aucune source.');
+        setProjects([]);
+        setFilteredProjects([]);
+        setDataSource('ERREUR');
       }
     };
 
@@ -150,12 +170,12 @@ const ProjectsMarketplace = () => {
       );
     }
 
-    // Appliquer tous les filtres
+    // Appliquer les filtres
     Object.keys(filters).forEach(filterKey => {
       if (filters[filterKey] && filterKey !== 'searchQuery') {
         filtered = filtered.filter(project => {
           if (filterKey === 'budget') {
-            const budget = project.budget;
+            const budget = project.budget || 0;
             switch (filters.budget) {
               case '0-50000': return budget <= 50000;
               case '50000-200000': return budget > 50000 && budget <= 200000;
@@ -167,11 +187,11 @@ const ProjectsMarketplace = () => {
           }
           
           if (filterKey === 'aiScore') {
-            return project.score >= parseInt(filters.aiScore);
+            return (project.score || 0) >= parseInt(filters.aiScore);
           }
           
           if (filterKey === 'duration') {
-            const duration = project.duration;
+            const duration = project.duration || 0;
             switch (filters.duration) {
               case '0-12': return duration <= 12;
               case '12-24': return duration > 12 && duration <= 24;
@@ -181,26 +201,19 @@ const ProjectsMarketplace = () => {
             }
           }
           
+          if (filterKey === 'location') {
+            const location = project.location?.toLowerCase() || '';
+            switch (filters.location) {
+              case 'france': return location.includes('france') || location.includes('paris') || location.includes('lyon');
+              case 'usa': return location.includes('usa') || location.includes('boston');
+              case 'europe': return location.includes('france') || location.includes('paris') || location.includes('lyon') || location.includes('londres') || location.includes('zurich');
+              default: return true;
+            }
+          }
+          
+          // Filtres directs
           return project[filterKey] === filters[filterKey];
         });
-      }
-    });
-
-    // Appliquer les tags actifs
-    activeTags.forEach(tag => {
-      switch (tag) {
-        case 'equity_available':
-          filtered = filtered.filter(project => project.investmentType === 'equity');
-          break;
-        case 'clinical_trials':
-          filtered = filtered.filter(project => project.stage === 'clinical_trials');
-          break;
-        case 'ai_focused':
-          filtered = filtered.filter(project => project.domain === 'ai_diagnostic');
-          break;
-        case 'europe':
-          filtered = filtered.filter(project => project.location === 'europe' || project.location === 'france');
-          break;
       }
     });
 
@@ -208,35 +221,27 @@ const ProjectsMarketplace = () => {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'score':
-          return b.score - a.score;
+          return (b.score || 0) - (a.score || 0);
         case 'funding':
-          return b.funding - a.funding;
+          return (b.funding || 0) - (a.funding || 0);
         case 'date':
           return new Date(b.createdAt) - new Date(a.createdAt);
         case 'budget':
-          return b.budget - a.budget;
+          return (b.budget || 0) - (a.budget || 0);
         default:
           return 0;
       }
     });
 
     setFilteredProjects(filtered);
-  }, [filters, activeTags, projects, sortBy]);
+  }, [filters, projects, sortBy]);
 
-  // Fonction pour "Voir détails"
-  const handleViewDetails = (projectId)=>{
-        navigate(`/project/${projectId}`);
-};
-
-  // Fonction pour "Investir"
-  const handleInvest = (projectId, projectTitle) => {
-   navigate(`/invest/${projectId}`);
+  const handleViewDetails = (projectId) => {
+    navigate(`/project/${projectId}`);
   };
 
-  // Fonction pour la pagination
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    console.log('📄 Page changée:', page);
+  const handleInvest = (projectId) => {
+    navigate(`/invest/${projectId}`);
   };
 
   const handleFilterChange = (filterName, value) => {
@@ -244,14 +249,6 @@ const ProjectsMarketplace = () => {
       ...prev,
       [filterName]: value
     }));
-  };
-
-  const toggleTag = (tagId) => {
-    setActiveTags(prev =>
-      prev.includes(tagId)
-        ? prev.filter(tag => tag !== tagId)
-        : [...prev, tagId]
-    );
   };
 
   const resetFilters = () => {
@@ -266,11 +263,10 @@ const ProjectsMarketplace = () => {
       location: '',
       innovationLevel: ''
     });
-    setActiveTags([]);
-    console.log('🔄 Filtres réinitialisés');
   };
 
   const formatBudget = (budget) => {
+    if (!budget) return 'N/A';
     if (budget >= 1000000) {
       return `${(budget / 1000000).toFixed(1)}M€`;
     }
@@ -278,15 +274,21 @@ const ProjectsMarketplace = () => {
   };
 
   const getScoreColor = (score) => {
+    if (!score) return '#6B7280';
     if (score >= 90) return '#059669';
     if (score >= 80) return '#2563EB';
     if (score >= 70) return '#D97706';
     return '#DC2626';
   };
 
-  const activeFiltersCount = Object.values(filters).filter(value => value !== '').length + activeTags.length;
+  const formatEnumValue = (value, type) => {
+    if (!value) return 'Non spécifié';
+    const option = filterOptions[type]?.find(opt => opt.value === value);
+    return option?.label || value;
+  };
 
-  // État de chargement
+  const activeFiltersCount = Object.values(filters).filter(value => value !== '').length;
+
   if (loading) {
     return (
       <div className="projects-marketplace">
@@ -298,7 +300,6 @@ const ProjectsMarketplace = () => {
     );
   }
 
-  // État d'erreur
   if (error) {
     return (
       <div className="projects-marketplace">
@@ -306,7 +307,6 @@ const ProjectsMarketplace = () => {
           <div className="error-icon">⚠️</div>
           <h3>Erreur de connexion</h3>
           <p>{error}</p>
-          <p>Assurez-vous que le backend est démarré sur le port 4000.</p>
           <button 
             className="btn-primary" 
             onClick={() => window.location.reload()}
@@ -320,7 +320,24 @@ const ProjectsMarketplace = () => {
 
   return (
     <div className="projects-marketplace">
-      {/* En-tête */}
+      {/* Bannière source des données */}
+      <div style={{
+        textAlign: 'center', 
+        padding: '8px', 
+        backgroundColor: dataSource === 'PRISMA_DATABASE' ? '#d1fae5' : '#fef3c7',
+        border: `1px solid ${dataSource === 'PRISMA_DATABASE' ? '#a7f3d0' : '#fcd34d'}`,
+        borderRadius: '6px',
+        margin: '0 20px 20px 20px',
+        fontSize: '14px',
+        color: dataSource === 'PRISMA_DATABASE' ? '#065f46' : '#92400e',
+        fontWeight: '500'
+      }}>
+        {dataSource === 'PRISMA_DATABASE' && '🗃️ Données en direct depuis la base de données'}
+        {dataSource === 'STATIC_API' && '📋 Données statiques de démonstration'}
+        {dataSource === 'ERREUR' && '❌ Impossible de charger les données'}
+        {dataSource === 'Chargement...' && '⏳ Chargement...'}
+      </div>
+
       <header className="marketplace-header">
         <div className="header-content">
           <div className="header-text">
@@ -332,15 +349,48 @@ const ProjectsMarketplace = () => {
               <div className="stat-number">{projects.length}</div>
               <div className="stat-label">Projets Actifs</div>
             </div>
-            <div className="stat">
-              <div className="stat-number">94%</div>
-              <div className="stat-label">Taux de Succès</div>
-            </div>
+            
+            {/* Bouton pour initialiser la base si vide */}
+            {projects.length === 0 && dataSource === 'PRISMA_DATABASE' && (
+              <button 
+                className="btn-primary"
+                onClick={async () => {
+                  try {
+                    setLoading(true);
+                    const response = await fetch('http://localhost:4000/api/init/init-projects', {
+                      method: 'POST'
+                    });
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                      alert(`✅ ${data.message}`);
+                      // Recharger les projets
+                      window.location.reload();
+                    } else {
+                      alert('❌ Erreur: ' + (data.error || 'Impossible de créer les projets'));
+                    }
+                  } catch (error) {
+                    alert('❌ Erreur de connexion: ' + error.message);
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading}
+                style={{ 
+                  marginLeft: '10px', 
+                  fontSize: '14px', 
+                  padding: '8px 16px',
+                  backgroundColor: '#059669'
+                }}
+              >
+                {loading ? '⏳ Création...' : '🚀 Initialiser la Base'}
+              </button>
+            )}
           </div>
         </div>
       </header>
 
-      {/* Barre de recherche et filtres */}
+      {/* Barre de recherche */}
       <section className="filters-section">
         <div className="search-container">
           <div className="search-box">
@@ -402,21 +452,6 @@ const ProjectsMarketplace = () => {
                   </div>
                 ))}
               </div>
-              
-              <div className="quick-filters">
-                <label className="filter-label">Filtres Rapides</label>
-                <div className="tags-container">
-                  {quickFilterTags.map(tag => (
-                    <button
-                      key={tag.id}
-                      className={`filter-tag ${activeTags.includes(tag.id) ? 'active' : ''}`}
-                      onClick={() => toggleTag(tag.id)}
-                    >
-                      {tag.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
           )}
         </div>
@@ -452,87 +487,139 @@ const ProjectsMarketplace = () => {
           </div>
         </div>
 
-        <div className="projects-grid">
-          {filteredProjects.map(project => (
-            <div
-              key={project.id}
-              className={`project-card ${project.isFeatured ? 'featured' : ''}`}
-            >
-              {project.isFeatured && (
-                <div className="featured-badge">Projet Vedette</div>
-              )}
-              
-              <div className="project-header">
-                <div className="project-meta">
-                  <span className="project-institution">{project.institution}</span>
-                  <div 
-                    className="project-score"
-                    style={{ backgroundColor: getScoreColor(project.score) }}
-                  >
-                    {project.score}%
+        {/* Affichage des projets */}
+        {filteredProjects.length > 0 && (
+          <div className="projects-grid">
+            {filteredProjects.map(project => (
+              <div
+                key={project.id}
+                className={`project-card ${project.isFeatured ? 'featured' : ''}`}
+              >
+                {project.isFeatured && (
+                  <div className="featured-badge">Projet Vedette</div>
+                )}
+                
+                <div className="project-header">
+                  <div className="project-meta">
+                    <span className="project-institution">{project.institution}</span>
+                    <div 
+                      className="project-score"
+                      style={{ backgroundColor: getScoreColor(project.score) }}
+                    >
+                      {project.score}%
+                    </div>
                   </div>
-                </div>
-                <h3 className="project-title">{project.title}</h3>
-                <p className="project-description">{project.description}</p>
-              </div>
-              
-              <div className="project-details">
-                <div className="detail-grid">
-                  <div className="detail-item">
-                    <span className="detail-label">Budget</span>
-                    <span className="detail-value">{formatBudget(project.budget)}</span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="detail-label">Durée</span>
-                    <span className="detail-value">{project.duration} mois</span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="detail-label">Financement</span>
-                    <span className="detail-value">{project.funding}%</span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="detail-label">Type</span>
-                    <span className="detail-value">
-                      {filterOptions.investmentType.find(t => t.value === project.investmentType)?.label}
-                    </span>
+                  <h3 className="project-title">{project.title}</h3>
+                  <p className="project-description">
+                    {project.description?.substring(0, 150)}...
+                  </p>
+                  <div className="project-researcher">
+                    <strong>Chercheur:</strong> {project.researcher}
                   </div>
                 </div>
                 
-                <div className="progress-container">
-                  <div className="progress-bar">
-                    <div 
-                      className="progress-fill" 
-                      style={{ width: `${project.funding}%` }}
-                    />
+                <div className="project-details">
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <span className="detail-label">Budget</span>
+                      <span className="detail-value">{formatBudget(project.budget)}</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Durée</span>
+                      <span className="detail-value">{project.duration} mois</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Financement</span>
+                      <span className="detail-value">{project.funding}%</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Type</span>
+                      <span className="detail-value">
+                        {formatEnumValue(project.investmentType, 'investmentType')}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="progress-container">
+                    <div className="progress-bar">
+                      <div 
+                        className="progress-fill" 
+                        style={{ width: `${project.funding}%` }}
+                      />
+                    </div>
+                    <span className="progress-text">{project.funding}% financé</span>
+                  </div>
+                </div>
+
+                <div className="project-footer">
+                  <div className="project-tags">
+                    {project.tags.slice(0, 3).map((tag, index) => (
+                      <span key={index} className="tag">{tag}</span>
+                    ))}
+                    {project.tags.length > 3 && (
+                      <span className="tag">+{project.tags.length - 3}</span>
+                    )}
+                  </div>
+                  <div className="project-actions">
+                    <button 
+                      className="btn-secondary"
+                      onClick={() => handleViewDetails(project.id)}
+                    >
+                      Voir détails
+                    </button>
+                    <button 
+                      className="btn-primary"
+                      onClick={() => handleInvest(project.id)}
+                    >
+                      Investir
+                    </button>
                   </div>
                 </div>
               </div>
+            ))}
+          </div>
+        )}
 
-              <div className="project-footer">
-                <div className="project-tags">
-                  {project.tags.map(tag => (
-                    <span key={tag} className="tag">{tag}</span>
-                  ))}
-                </div>
-                <div className="project-actions">
-                  <button 
-                    className="btn-secondary"
-                    onClick={() => handleViewDetails(project.id)}
-                  >
-                    Voir détails
-                  </button>
-                  <button 
-                    className="btn-primary"
-                    onClick={() => handleInvest(project.id, project.title)}
-                  >
-                    Investir
-                  </button>
-                </div>
-              </div>
+        {/* Message base vide */}
+        {filteredProjects.length === 0 && projects.length === 0 && dataSource === 'PRISMA_DATABASE' && (
+          <div className="no-results">
+            <div className="no-results-content">
+              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🗃️</div>
+              <h3>Base de données vide</h3>
+              <p>Aucun projet n'a été trouvé dans la base de données.</p>
+              <p>Cliquez sur "Initialiser la Base" pour créer des projets exemple.</p>
+              <button 
+                className="btn-primary"
+                onClick={async () => {
+                  try {
+                    setLoading(true);
+                    const response = await fetch('http://localhost:4000/api/init/init-projects', {
+                      method: 'POST'
+                    });
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                      alert(`✅ ${data.message}`);
+                      window.location.reload();
+                    } else {
+                      alert('❌ Erreur: ' + (data.error || 'Impossible de créer les projets'));
+                    }
+                  } catch (error) {
+                    alert('❌ Erreur de connexion: ' + error.message);
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading}
+                style={{ backgroundColor: '#059669', borderColor: '#059669' }}
+              >
+                {loading ? '⏳ Création en cours...' : '🚀 Initialiser la Base de Données'}
+              </button>
             </div>
-          ))}
-        </div>
+          </div>
+        )}
 
+        {/* Aucun résultat avec filtres */}
         {filteredProjects.length === 0 && projects.length > 0 && (
           <div className="no-results">
             <div className="no-results-content">
@@ -542,44 +629,6 @@ const ProjectsMarketplace = () => {
                 Réinitialiser la recherche
               </button>
             </div>
-          </div>
-        )}
-
-        {filteredProjects.length === 0 && projects.length === 0 && (
-          <div className="no-results">
-            <div className="no-results-content">
-              <h3>Aucun projet disponible</h3>
-              <p>Aucun projet n'est actuellement disponible dans la base de données.</p>
-            </div>
-          </div>
-        )}
-
-        {filteredProjects.length > 0 && (
-          <div className="pagination">
-            <button 
-              className="pagination-btn"
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              Précédent
-            </button>
-            <div className="pagination-pages">
-              {[1, 2, 3].map(page => (
-                <button
-                  key={page}
-                  className={`pagination-page ${currentPage === page ? 'active' : ''}`}
-                  onClick={() => handlePageChange(page)}
-                >
-                  {page}
-                </button>
-              ))}
-            </div>
-            <button 
-              className="pagination-btn"
-              onClick={() => handlePageChange(currentPage + 1)}
-            >
-              Suivant
-            </button>
           </div>
         )}
       </section>
